@@ -1,0 +1,8 @@
+"C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe" --dbpath "C:\Users\SONY\Desktop\nodejs login app\expressGenerator\MyLoginApp\data"
+
+1. install
+2 setup environment variable to path = C:\Program Files\MongoDB\Server\4.0\bin
+3. start exe and type mongo/mongodb
+
+
+
