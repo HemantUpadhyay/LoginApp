@@ -1,1 +1,0 @@
-var constant = require('./dev-env');
