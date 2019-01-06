@@ -1,10 +1,9 @@
 const config = require('./../config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const db = require('./../_config/db');
-
-const Users = db.Users;
-
+const mongoDB = require('mongodb');
+let ObjectId = mongoDB.ObjectID;
+// const db = process.env.db;s
 module.exports = {
     authenticate,
     getAll,
@@ -30,17 +29,17 @@ async function authenticate({username, password})
 
 async function getAll()
 {
-    return await Users.find().select('-hash');    
+    return await db.collection('Users').find().toArray();    
 }
 
 async function getById(id)
 {
-    return await Users.findById(id).select('-hash');
+    return await db.collection('Users').find({_id : ObjectId(id)}).toArray();
 }
 
 async function create(userParam)
 {
-    if(await Users.findOne({username:userParam.username}))
+    if(await db.collection('Users').findOne({username:userParam.username}))
     {
         throw 'username "' + userParam.username +'" is already taken';
     }
@@ -57,10 +56,10 @@ async function create(userParam)
 
 async function update(id, userParam)
 {
-    const user = await Users.findById(id);
+    const user = await db.collection('Users').findById(id);
 
     if(!user) throw 'User not found';
-    if(user.username !== userParam.username && await Users.findOne({username:userParam.username}))
+    if(user.username !== userParam.username && await db.collection('Users').findOne({username:userParam.username}))
     {
         throw 'username "'+ userParam.username + '" is already taken';
     }
@@ -76,5 +75,5 @@ async function update(id, userParam)
 
 async function _delete(id)
 {
-    await Users.findByIdAndRemove(id);
+    await db.collection('Users').findByIdAndRemove(id);
 }
